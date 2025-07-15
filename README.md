@@ -1,6 +1,10 @@
 # sleep-hacking-ha
 Sleep Hacking pour Home Assistant
 
+## Disclamer - Attention !
+Tout d'abort ce dépot GIT et les documents qui s'y trouvent ne représentent pas de conseils médicaux mais mon avis personnel et le fruit de mes recherches réalisés principalement à l'aide de chatGPT o3 avec la recherche approfondie et ou internet activé pour qu'il me résume les études scientifiques et me donne les formules, algo à mettre en place. 
+
+## L'objectif
 L'objectif de ce dépot est de capitaliser des connaissance sur le sleep hacking et des métriques ou des aides via home assistant pour aider les gens à mieux dormir. 
 Beaucoup de données médicales ou de capteurs opensources deviennent payant et obligent les gens à fournir leurs données médicales dans le cloud. 
 Ici l'objectif principale est de tout garder en local. Il y aura probablement aussi des projets parallèles open hardware pour faire des capteurs libres. 
