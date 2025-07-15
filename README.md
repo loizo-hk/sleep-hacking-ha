@@ -24,4 +24,59 @@ Je me suis basé sur un capteur emfitQS v1 qui expose localement une api avec le
 
   En effet les premières étapes se font simplement en mesurant la régularité des heures de sommeil. Sans capteur dédié ce sera moins précis mais la littérature scientifique publie déjà des choses à ce sujet.
 
+  Pour calculer le SD il faut simplement l'heure de couché donc un simple capteur de présence suffit.
+  Dans Home Assistant avec Emfit j'ai donc ceci dans un fichier template.yaml
+
+\# un premier trigger pour récupérer l'heure de coucher la nuit (la plage horaire sert à traiter distinctement les sieste des nuits)
+  - trigger:
+    - platform: state
+      entity_id: binary_sensor.in_bed_smooth
+      to: 'on'
+      for: '00:05:00'
+  condition:
+    - condition: time           # fenêtre nuit
+      after: "18:00:00"
+      before: "05:00:00"
+  sensor:
+    - name: "Heure de coucher"
+      state: '{{ now().strftime("%H:%M:%S") }}'
+      unique_id: "heure_coucher_emfit"
+      icon: mdi:bed
+
+\# un second trigger pour récupérer l'heure des siestes si il y a (la plage horaire sert à traiter distinctement les sieste des nuits)
+
+  - trigger:
+    - platform: state
+      entity_id: binary_sensor.in_bed_smooth
+      from: "off"
+      to:   "on"
+      for:  "00:10:00"          # sieste courte
+  condition:
+    - condition: time
+      after: "11:00:00"
+      before: "17:00:00"
+  sensor:
+    - name: "Dernière sieste"
+      device_class: timestamp
+      state: '{{ now().strftime("%H:%M:%S") }}'
+      icon: mdi:bed
+      
+\# Un sensor binaire pour lisser les présence dans le liet et éviter qu'un réveil de 10mn (pause toilette) soit compté, les articles scientifiques considère qu'en dessous de 10mn de réveil ça ne compte pas.
+  - binary_sensor:
+    - name: "In‑bed lissé"
+      unique_id: in_bed_smooth
+      device_class: occupancy
+      state: "{{ is_state('binary_sensor.emfitqs_002105_bed_presence', 'on') }}"
+      delay_off: "00:10:00"       # fusionne les sorties <10 min
+      delay_on:  "00:00:30"       # évite les faux on/off rapides
+      
+
   à continuer ... 
+  # Todo 
+  Avancer sur les autres calculs
+  Entrainer un petit model de machine learning pour améliorer la précision et les détection de phases Wake / Light / Deep / REM
+  Avoir un score du sommeil le plus fiable possible
+  Faire un dashboard
+  Ajouter les sources des informations cités
+  Mettre tout ça dans une intégration
+  
