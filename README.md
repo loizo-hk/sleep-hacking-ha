@@ -32,9 +32,9 @@ Je me suis basé sur un capteur emfitQS v1 qui expose localement une api avec le
 
   Qu'es-ce que c'est et quels sont les impacts et recommendations selon chatGPT-o3 avec la recherche internet active et la recherche approfondie : 
 
-  ## Variabilité horaire du sommeil : définitions et impacts santé
+#### Variabilité horaire du sommeil : définitions et impacts santé
 
-### Comment on mesure le « SD »
+##### Comment on mesure le « SD »
 - **Écart‑type (SD) de l’heure de coucher / lever** : dispersion inter‑nuits d’un horaire‑repère (coucher, endormissement ou lever final) calculée sur 7–14 jours.  
 - **Interprétation rapide**  
   | SD (min) | Régularité | Impact santé* |
@@ -48,7 +48,7 @@ Je me suis basé sur un capteur emfitQS v1 qui expose localement une api avec le
 
 ---
 
-## SD **de l’heure de coucher**
+#### SD **de l’heure de coucher**
 
 - **Mécanisme** : un coucher très variable désynchronise l’horloge circadienne → dérèglement sécrétion mélatonine/cortisol, température, appétit.
 - **Preuves clés**  
@@ -58,7 +58,7 @@ Je me suis basé sur un capteur emfitQS v1 qui expose localement une api avec le
 
 ---
 
-## SD **de l’heure de lever (réveil final)**
+#### SD **de l’heure de lever (réveil final)**
 
 - **Mécanisme** : un lever irrégulier perturbe l’exposition à la lumière du matin (Zeitgeber n° 1) → dérive du fuseau interne, “jet‑lag social”.
 - **Preuves clés**  
@@ -68,7 +68,7 @@ Je me suis basé sur un capteur emfitQS v1 qui expose localement une api avec le
 
 ---
 
-## Pourquoi ça compte pour la santé ?
+#### Pourquoi ça compte pour la santé ?
 
 > **Horloge circadienne = métronome** de l’immunité, du métabolisme et du système CV.  
 > Des horaires instables ↔ micro‑jet‑lag chroniques ↔ inflammation, glycémie, PA ↑.
@@ -79,30 +79,12 @@ Je me suis basé sur un capteur emfitQS v1 qui expose localement une api avec le
 
 ---
 
-## Capteurs : On / Off vs. BCG
-
-| Objectif | Capteur présence on/off | Capteur BCG sous‑matelas |
-|----------|-------------------------|--------------------------|
-| SD coucher / lever | ✅ Horaire fiable | ✅ Horaire + latence |
-| Latence d’endormissement | ❌ (impossible) | ✅ erreur < 6 min [(JCSM 2022)](https://jcsm.aasm.org/doi/10.5664/jcsm.9754) |
-| Sleep Regularity Index | ⚠️ manque fragmentation | ✅ accord PSG 83‑90 % |
-| Stades N2/REM | ❌ | ⚠️ précision limitée |
-
-En pratique : un détecteur **on/off** suffit pour suivre les SD couchers/levers. Si vous visez le *Sleep Regularity Index* complet, la latence ou l’efficacité de sommeil, préférez un **BCG** (Emfit QS, Withings Sleep…) – malgré un léger biais (+ ~15 min TST) rapporté par les études.
-
----
-
-> **À retenir :**  
-> - Viser **< 30 min de SD** pour coucher *et* lever.  
-> - Les SD > 60 min sont associés à 20‑40 % de risque CV supplémentaire.  
-> - Des horaires réguliers sont un **levier simple** pour réduire diabète, HTA et fatigue.
-
   
   Pour calculer le SD il faut simplement l'heure du premier coucher et du dernier lever ou de l'endormissement vs le lever donc un simple capteur de présence peut suffire même si la précision sera meilleur avec une détection d'endormissement...
 
   Voici encore une fois un retour de chatGPT-o3 recherche internet + non approfondie sur les capteurs BCG vs simple capteur on off de présence et les radars micrométriques : 
 
-  ## Capteurs de suivi du sommeil : comparaison On/Off, BCG et radar micro‑onde
+#### Capteurs de suivi du sommeil : comparaison On/Off, BCG et radar micro‑onde
 
 | Critère                          | **Présence lit On/Off**<br>(interrupteur, tapis pression) | **BCG sous‑matelas**<br>(Emfit QS, Withings Sleep) | **Radar micro‑onde**<br>(mmWave 60 GHz, 24 GHz) |
 |----------------------------------|-----------------------------------------------------------|----------------------------------------------------|-------------------------------------------------|
@@ -120,7 +102,7 @@ En pratique : un détecteur **on/off** suffit pour suivre les SD couchers/leve
 | **Limitations majeures**         | Pas de latence ni stades; surestime TST (+ ~90 min) [(Actigraphy rev. 2019)](https://pmc.ncbi.nlm.nih.gov/articles/PMC7176028/) | Sur‑estime TST (+ 15 min), stades approximatifs   | Sensible aux mouvements de partenaire, besoin calibration |
 | **SI sécurité/radio**            | Pas d’ondes                                              | Pas d’ondes                                        | Ondes RF < 10 mW, directives IEC 60601‑1‑2       |
 
-### Points clés
+##### Points clés
 - **On/Off** : parfait pour horaires et SD (coucher/lever) ; insuffisant pour latence, fragmentation, SRI complet.  
 - **BCG** : compromis grand public ; bonne détection sommeil/veille, latence fiable, stades « indicatifs ». Idéal pour SRI, HR/HRV nocturne.  
 - **Radar micro‑onde** : très prometteur (sans contact, mesure FR/FC), mais encore **peu validé cliniquement** ; brille pour suivi respiration (apnée) plutôt que stades.  
@@ -129,51 +111,9 @@ En pratique : un détecteur **on/off** suffit pour suivre les SD couchers/leve
   * *Latence, SRI, HRV →* BCG recommandé.  
   * *Respiration, surveillance sans contact (bébé/soins) →* Radar mmWave.
 
+## Configuration Home Assistant
+a rédiger
 
-  Dans Home Assistant avec Emfit j'ai donc ceci dans un fichier template.yaml
-
-\# un premier trigger pour récupérer l'heure de coucher la nuit (la plage horaire sert à traiter distinctement les sieste des nuits)
-  - trigger:
-    - platform: state
-      entity_id: binary_sensor.in_bed_smooth
-      to: 'on'
-      for: '00:05:00'
-  condition:
-    - condition: time           # fenêtre nuit
-      after: "18:00:00"
-      before: "05:00:00"
-  sensor:
-    - name: "Heure de coucher"
-      state: '{{ now().strftime("%H:%M:%S") }}'
-      unique_id: "heure_coucher_emfit"
-      icon: mdi:bed
-
-\# un second trigger pour récupérer l'heure des siestes si il y a (la plage horaire sert à traiter distinctement les sieste des nuits)
-
-  - trigger:
-    - platform: state
-      entity_id: binary_sensor.in_bed_smooth
-      from: "off"
-      to:   "on"
-      for:  "00:10:00"          # sieste courte
-  condition:
-    - condition: time
-      after: "11:00:00"
-      before: "17:00:00"
-  sensor:
-    - name: "Dernière sieste"
-      device_class: timestamp
-      state: '{{ now().strftime("%H:%M:%S") }}'
-      icon: mdi:bed
-      
-\# Un sensor binaire pour lisser les présence dans le liet et éviter qu'un réveil de 10mn (pause toilette) soit compté, les articles scientifiques considère qu'en dessous de 10mn de réveil ça ne compte pas.
-  - binary_sensor:
-    - name: "In‑bed lissé"
-      unique_id: in_bed_smooth
-      device_class: occupancy
-      state: "{{ is_state('binary_sensor.emfitqs_002105_bed_presence', 'on') }}"
-      delay_off: "00:10:00"       # fusionne les sorties <10 min
-      delay_on:  "00:00:30"       # évite les faux on/off rapides
       
 
   à continuer ... 
