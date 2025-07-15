@@ -28,7 +28,108 @@ Je me suis basé sur un capteur emfitQS v1 qui expose localement une api avec le
 
   En effet les premières étapes se font simplement en mesurant la régularité des heures de sommeil. Sans capteur dédié ce sera moins précis mais la littérature scientifique publie déjà des choses à ce sujet.
 
-  Pour calculer le SD il faut simplement l'heure de couché donc un simple capteur de présence suffit.
+### La variabilité horaire (SD)
+
+  Qu'es-ce que c'est et quels sont les impacts et recommendations selon chatGPT-o3 avec la recherche internet active et la recherche approfondie : 
+
+  ## Variabilité horaire du sommeil : définitions et impacts santé
+
+### Comment on mesure le « SD »
+- **Écart‑type (SD) de l’heure de coucher / lever** : dispersion inter‑nuits d’un horaire‑repère (coucher, endormissement ou lever final) calculée sur 7–14 jours.  
+- **Interprétation rapide**  
+  | SD (min) | Régularité | Impact santé* |
+  |---------:|------------|---------------|
+  | 0 – 29 min | Très régulière | Profil cardio‑métabolique sain |
+  | 30 – 59 min | Moyenne | Surveiller HbA1c, IMC |
+  | ≥ 60 min | Irrégulière | +20‑40 % d’AVC/IDM, DT2 |
+  | ≥ 90 min | Très irrégulière | Risque × 2 événements CV |
+
+  *Synthèse cohortes UK Biobank, MESA, CARDIA et revues SRS/AHA.
+
+---
+
+## SD **de l’heure de coucher**
+
+- **Mécanisme** : un coucher très variable désynchronise l’horloge circadienne → dérèglement sécrétion mélatonine/cortisol, température, appétit.
+- **Preuves clés**  
+  *   Cohorte **MESA** : SD ≥ 90 min ⇢ **risque CV × 2** (5 ans) [(JACC 2020)](https://www.jacc.org/doi/10.1016/j.jacc.2019.12.054)  
+  *   Femmes d’âge moyen : +30 min de SD ⇢ ↑ adiposité viscérale & HbA1c [(SLEEP 2016)](https://pubmed.ncbi.nlm.nih.gov/26715274/)  
+  *   Revue SRS 2023 : objectif < 30 min [(Sleep Health)](https://www.sleephealthjournal.org/article/S2352-7218%2823%2900166-3/fulltext)  
+
+---
+
+## SD **de l’heure de lever (réveil final)**
+
+- **Mécanisme** : un lever irrégulier perturbe l’exposition à la lumière du matin (Zeitgeber n° 1) → dérive du fuseau interne, “jet‑lag social”.
+- **Preuves clés**  
+  *   **UK Biobank** (≈ 88 k) : SD lever ≥ 60 min ⇢ **+26 % AVC/IDM** indépendamment de la durée de sommeil [(Nat. Comm. 2024)](https://www.nature.com/articles/s41467-024-XXXX)  
+  *   Revue AHA 2023 : SD lever ↑ → HTA nocturne, non‑dipping tension [(Hypertension)](https://www.ahajournals.org/doi/10.1161/HYPERTENSIONAHA.123.21497)  
+  *   Consensus SRS 2023 : viser SD lever < 30 min, fenêtre 04 h–12 h.
+
+---
+
+## Pourquoi ça compte pour la santé ?
+
+> **Horloge circadienne = métronome** de l’immunité, du métabolisme et du système CV.  
+> Des horaires instables ↔ micro‑jet‑lag chroniques ↔ inflammation, glycémie, PA ↑.
+
+- Fragmentation hormonale : pic de mélatonine retardé → insuline moins efficace.  
+- Rythme température déplacé → pression artérielle mal calée sur le jour.  
+- Sommeil irrégulier → baisse sommeil profond ↔ + cortisol ↔ stress oxydant.
+
+---
+
+## Capteurs : On / Off vs. BCG
+
+| Objectif | Capteur présence on/off | Capteur BCG sous‑matelas |
+|----------|-------------------------|--------------------------|
+| SD coucher / lever | ✅ Horaire fiable | ✅ Horaire + latence |
+| Latence d’endormissement | ❌ (impossible) | ✅ erreur < 6 min [(JCSM 2022)](https://jcsm.aasm.org/doi/10.5664/jcsm.9754) |
+| Sleep Regularity Index | ⚠️ manque fragmentation | ✅ accord PSG 83‑90 % |
+| Stades N2/REM | ❌ | ⚠️ précision limitée |
+
+En pratique : un détecteur **on/off** suffit pour suivre les SD couchers/levers. Si vous visez le *Sleep Regularity Index* complet, la latence ou l’efficacité de sommeil, préférez un **BCG** (Emfit QS, Withings Sleep…) – malgré un léger biais (+ ~15 min TST) rapporté par les études.
+
+---
+
+> **À retenir :**  
+> - Viser **< 30 min de SD** pour coucher *et* lever.  
+> - Les SD > 60 min sont associés à 20‑40 % de risque CV supplémentaire.  
+> - Des horaires réguliers sont un **levier simple** pour réduire diabète, HTA et fatigue.
+
+  
+  Pour calculer le SD il faut simplement l'heure du premier coucher et du dernier lever ou de l'endormissement vs le lever donc un simple capteur de présence peut suffire même si la précision sera meilleur avec une détection d'endormissement...
+
+  Voici encore une fois un retour de chatGPT-o3 recherche internet + non approfondie sur les capteurs BCG vs simple capteur on off de présence et les radars micrométriques : 
+
+  ## Capteurs de suivi du sommeil : comparaison On/Off, BCG et radar micro‑onde
+
+| Critère                          | **Présence lit On/Off**<br>(interrupteur, tapis pression) | **BCG sous‑matelas**<br>(Emfit QS, Withings Sleep) | **Radar micro‑onde**<br>(mmWave 60 GHz, 24 GHz) |
+|----------------------------------|-----------------------------------------------------------|----------------------------------------------------|-------------------------------------------------|
+| **Principe**                     | Contact / pression : état **ON** quand le lit est occupé | Ballisto‑cardiographie : capteur piezo/mat inertielle détecte micro‑mouvements cardiaques & respi | Ondes RF mesurent micro‑déplacements (< 1 mm) du thorax & du lit |
+| **Données**                      | Horaire entrée / sortie lit                              | FC, FR, activité, état sleep/wake minuté           | FR, micro‑mouvements, parfois FC dérivée        |
+| **Latence d’endormissement**     | ❌ impossible                                             | ✅ erreur absolue méd. < 6 min [(JCSM 2022)](https://jcsm.aasm.org/doi/10.5664/jcsm.9754) | ✅ < 5 min sur 23 sujets [(IEEE 2023)](https://ieeexplore.ieee.org/document/10007280) |
+| **Accord sommeil/veille vs PSG** | ~70 % (uniquement grâce à heuristiques de durée)          | 83 – 90 % adapté adulte [(Sensors 2021)](https://www.mdpi.com/1424-8220/21/3/884) | 85 – 92 % sur lit simple [(IEEE Sens 2022)](https://ieeexplore.ieee.org/document/9774212) |
+| **Stades de sommeil**            | ❌                                                        | ⚠️ REM/N3 approximatifs (+30 % REM)                | ⚠️ recherche expérimentale, pas validé clinique |
+| **WASO (fragmentation)**         | ❌ < 5 min impossible                                     | ✅ bonne sensibilité > 5 min                       | ✅ détecte micro‑mouvements mais seuils à régler |
+| **Installation**                 | Très simple : tapis ou capteur sous sommier              | Sous‑matelas fin, nécessite prise secteur          | Module radar au‑dessus / sous lit, angle précis |
+| **Sensibilité poids/pet**        | Sensible à un chat        | Peu sensible (< 10 kg filtré)                      | Très peu sensible (algos de distance)           |
+| **Interopérabilité HA**          | MQTT / ESPhome (binary_sensor)                           | Intégrations Emfit / Withings (REST, BLE, Wi‑Fi)  | ESPHome → mmWave (GPIO/UART)                    |
+| **Précision Horaire (SD)**       | ✅ (± 1 min)                                             | ✅ (± < 10 s)                                      | ✅ (± < 10 s)                                   |
+| **Coût materiel**                | 10 – 35 €                                                | 120 – 300 €                                       | 5 € (RCWL‑0516 24 GHz) → 50 € (mmWave 60 GHz)   |
+| **Limitations majeures**         | Pas de latence ni stades; surestime TST (+ ~90 min) [(Actigraphy rev. 2019)](https://pmc.ncbi.nlm.nih.gov/articles/PMC7176028/) | Sur‑estime TST (+ 15 min), stades approximatifs   | Sensible aux mouvements de partenaire, besoin calibration |
+| **SI sécurité/radio**            | Pas d’ondes                                              | Pas d’ondes                                        | Ondes RF < 10 mW, directives IEC 60601‑1‑2       |
+
+### Points clés
+- **On/Off** : parfait pour horaires et SD (coucher/lever) ; insuffisant pour latence, fragmentation, SRI complet.  
+- **BCG** : compromis grand public ; bonne détection sommeil/veille, latence fiable, stades « indicatifs ». Idéal pour SRI, HR/HRV nocturne.  
+- **Radar micro‑onde** : très prometteur (sans contact, mesure FR/FC), mais encore **peu validé cliniquement** ; brille pour suivi respiration (apnée) plutôt que stades.  
+- Choisir le capteur dépend de l’objectif :  
+  * *SD horaires →* On/Off suffit.  
+  * *Latence, SRI, HRV →* BCG recommandé.  
+  * *Respiration, surveillance sans contact (bébé/soins) →* Radar mmWave.
+
+
   Dans Home Assistant avec Emfit j'ai donc ceci dans un fichier template.yaml
 
 \# un premier trigger pour récupérer l'heure de coucher la nuit (la plage horaire sert à traiter distinctement les sieste des nuits)
